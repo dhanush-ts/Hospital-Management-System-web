@@ -6,15 +6,22 @@ import {
   BookOpen,
   Bot,
   Command,
+  Currency,
   Frame,
   GalleryVerticalEnd,
+  History,
+  Home,
+  Hospital,
   Map,
+  Notebook,
   PieChart,
+  Pill,
+  Receipt,
   Settings2,
   SquareTerminal,
+  Tablet,
 } from "lucide-react"
 
-import { NavMain } from "./nav-main"
 import { NavUser } from "./nav-user"
 import { TeamSwitcher } from "./team-switcher"
 import {
@@ -24,6 +31,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { NavGroup } from "./nav-group"
 
 // This is sample data.
 const data = {
@@ -51,89 +59,30 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
+      title: "Home",
+      url: "/home",
+      icon: Home,
       isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "/dashboard/history",
-        },
-        {
-          title: "Dashboard",
-          url: "/dashboard",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      title: "Appointments",
+      url: "/appointments",
+      icon: Notebook,
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      title: "Pharma Orders",
+      url: "/pharma",
+      icon: Pill,
     },
     {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+      title: "Bills",
+      url: "/bills",
+      icon: Receipt,
+    },
+    {
+      title: "History",
+      url: "/history",
+      icon: History,
     },
   ],
   projects: [
@@ -162,7 +111,7 @@ export function AppSidebar({ ...props }) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavGroup title={"Items"} items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

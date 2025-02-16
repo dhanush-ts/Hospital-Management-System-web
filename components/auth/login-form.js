@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { api } from "@/app/api"
+import { cookies } from "next/headers";
 
 export async function handleLogin(formData) {
   "use server";
@@ -32,13 +33,27 @@ export async function handleLogin(formData) {
 
   const new_data = await response.json();
 
-  if (response.ok){
-    redirect(`/home?jwt=${new_data.token}&user_type=${new_data.user_type}`);
-  }
-  else {
+  if (response.ok) {
+    cookies().set("jwt", new_data.token, {
+      httpOnly: false, // Prevent client-side access for security
+      secure: false, // Use HTTPS in production
+      sameSite: "Strict",
+      path: "/",
+    });
+
+    cookies().set("user_type", new_data.user_type, {
+      httpOnly: false,
+      secure: false,
+      sameSite: "Strict",
+      path: "/",
+    });
+
+    redirect(`/home`);
+  } else {
     throw new Error("Wrong credentials");
   }
 }
+
 
 export async function LoginForm({
   className,

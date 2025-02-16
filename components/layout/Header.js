@@ -6,16 +6,21 @@ import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
 
 const Header = () => {
-
     
     const pathname = usePathname();
     const router = useRouter();
     
     useEffect(() => {
-        if (localStorage.getItem("jwt")) {
-            router.push("/home");
+        const token = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("jwt="))
+            ?.split("=")[1];
+
+        if (token) {
+            router.push("/home"); // Redirect if token exists
         }
     }, []);
+
     return (
         <div>
             <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
