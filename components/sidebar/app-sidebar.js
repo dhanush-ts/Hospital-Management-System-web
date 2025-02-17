@@ -63,26 +63,31 @@ const data = {
       url: "/home",
       icon: Home,
       isActive: true,
+      roles : ["admin", "doctor", "patient","pharma"]
     },
     {
       title: "Appointments",
       url: "/appointments",
       icon: Notebook,
+      roles : ["admin", "doctor", "patient"]
     },
     {
       title: "Pharma Orders",
       url: "/pharma",
       icon: Pill,
+      roles : ["admin", "pharma", "patient"]
     },
     {
       title: "Bills",
       url: "/bills",
       icon: Receipt,
+      roles : ["admin", "doctor", "patient"]
     },
     {
       title: "History",
       url: "/history",
       icon: History,
+      roles : ["admin", "doctor", "patient"]
     },
   ],
   projects: [
