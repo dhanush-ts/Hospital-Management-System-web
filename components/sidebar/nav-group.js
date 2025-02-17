@@ -11,6 +11,7 @@ import {
   useSidebar,
 } from "../ui/sidebar"
 import { Badge } from "../ui/badge"
+import { useEffect, useState } from "react"
 
 // Badge component for navigation items
 const NavBadge = ({ children }) => (
@@ -46,13 +47,24 @@ const SidebarMenuLink = ({ item }) => {
 
 // Sidebar navigation group
 export function NavGroup({ title, items }) {
+  const [cookieValue, setCookieValue] = useState("");
+
+  useEffect(() => {
+    const cookies = document.cookie.split("; ");
+    const targetCookie = cookies.find((row) => row.startsWith("user_type="));
+    if (targetCookie) {
+      setCookieValue(targetCookie.split("=")[1]);
+    }
+    console.log('targetCookie', targetCookie.split("=")[1])
+  }, []);
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuLink key={`${item.title}-${item.url}`} item={item} />
-        ))}
+        {items.map((item) => 
+            item.roles.includes(cookieValue) && (<SidebarMenuLink key={`${item.title}-${item.url}`} item={item} />)
+        )}
       </SidebarMenu>
     </SidebarGroup>
   )
