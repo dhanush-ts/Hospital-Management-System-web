@@ -17,7 +17,7 @@ import { api } from "@/app/api"
 import { cookies } from "next/headers";
 
 export async function handleLogin(formData) {
-  "use server";
+  const cokie = await cookies();
   const data = {
     full_name: formData.get("full_name"),
     password: formData.get("password"),
@@ -34,7 +34,7 @@ export async function handleLogin(formData) {
   const new_data = await response.json();
 
   if (response.ok) {
-    cookies().set("jwt", new_data.token, {
+    cokie.set("jwt", new_data.token, {
       httpOnly: false, // Prevent client-side access for security
       secure: false, // Use HTTPS in production
       sameSite: "Strict",
@@ -53,7 +53,6 @@ export async function handleLogin(formData) {
     throw new Error("Wrong credentials");
   }
 }
-
 
 export async function LoginForm({
   className,

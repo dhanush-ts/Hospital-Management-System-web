@@ -23,7 +23,6 @@ const checkIsActive = (href, itemUrl) => {
   return href === itemUrl
 }
 
-// Sidebar menu link component
 const SidebarMenuLink = ({ item }) => {
   const pathname = usePathname() // Get current URL
   const { setOpenMobile } = useSidebar()
@@ -45,7 +44,6 @@ const SidebarMenuLink = ({ item }) => {
   )
 }
 
-// Sidebar navigation group
 export function NavGroup({ title, items }) {
   const [cookieValue, setCookieValue] = useState("");
 

@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 export async function logout() {
-    cookies().delete("jwt");
-    cookies().delete("user_type");
+    const cokie = await cookies();
+    cokie.delete("jwt");
+    cokie.delete("user_type");
     redirect("/login");
 }

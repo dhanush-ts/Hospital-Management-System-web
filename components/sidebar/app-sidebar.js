@@ -20,6 +20,7 @@ import {
   Settings2,
   SquareTerminal,
   Tablet,
+  Stethoscope 
 } from "lucide-react"
 
 import { NavUser } from "./nav-user"
@@ -64,6 +65,12 @@ const data = {
       icon: Home,
       isActive: true,
       roles : ["admin", "doctor", "patient","pharma"]
+    },
+    {
+      title: "Doctors",
+      url: "/doctors",
+      icon: Stethoscope ,
+      roles : ["admin", "patient"]
     },
     {
       title: "Appointments",
