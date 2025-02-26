@@ -4,8 +4,9 @@ import { fetchData } from "@/hooks/fetch-data"
 import ConsultationForm from "./consultation-form"
 
 export default async function AppointmentPage({ params }) {
+  const id = (await params).id;
   const [appointmentData, medicines] = await Promise.all([
-    fetchData(`features/appointment/${params.id}/`, "GET"),
+    fetchData(`features/appointment/${id}/`, "GET"),
     fetchData("features/medicines/", "GET"),
   ])
 
@@ -20,6 +21,7 @@ export default async function AppointmentPage({ params }) {
     <div className="p-6">
       <Card>
         <CardHeader>
+          <CardTitle className="text-2xl mb-2">Patient Details</CardTitle>
           <div className="flex justify-between items-start">
             <div className="grid gap-2">
               <div className="text-sm text-muted-foreground">Patient Name</div>
