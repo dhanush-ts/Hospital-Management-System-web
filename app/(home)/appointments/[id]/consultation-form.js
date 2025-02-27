@@ -1,18 +1,32 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search, GripVertical, X } from "lucide-react"
+import { Search, GripVertical, X, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
+import { api } from "@/app/api"
 
 export default function ConsultationForm({ appointmentId, medicines }) {
   const [description, setDescription] = useState("")
   const [medications, setMedications] = useState([])
   const [searchQuery, setSearchQuery] = useState("")
+
+  const [cookieValue, setCookieValue] = useState("");
+    
+      useEffect(() => {
+        const cookies = document.cookie.split("; ");
+        const targetCookie = cookies.find((row) => row.startsWith("jwt="));
+        if (targetCookie) {
+          setCookieValue(targetCookie.split("=")[1]);
+        }
+        console.log('targetCookie', targetCookie.split("=")[1])
+      }, []);
 
   const filteredMedicines = medicines.filter(
     (medicine) =>
@@ -25,7 +39,6 @@ export default function ConsultationForm({ appointmentId, medicines }) {
 
     const { source, destination } = result
 
-    // If dragging from medicine list to prescription
     if (source.droppableId === "medicineList" && destination.droppableId === "prescription") {
       const medicine = filteredMedicines[source.index]
       setMedications([
@@ -37,9 +50,7 @@ export default function ConsultationForm({ appointmentId, medicines }) {
           days: 1,
         },
       ])
-    }
-    // If reordering within prescription
-    else if (source.droppableId === "prescription" && destination.droppableId === "prescription") {
+    } else if (source.droppableId === "prescription" && destination.droppableId === "prescription") {
       const items = Array.from(medications)
       const [reorderedItem] = items.splice(source.index, 1)
       items.splice(destination.index, 0, reorderedItem)
@@ -53,10 +64,11 @@ export default function ConsultationForm({ appointmentId, medicines }) {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`/api/features/prescription/${appointmentId}/`, {
+      const response = await fetch(`${api}features/prescription/${appointmentId}/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${cookieValue}`,
         },
         body: JSON.stringify({
           description,
@@ -71,7 +83,6 @@ export default function ConsultationForm({ appointmentId, medicines }) {
 
       if (!response.ok) throw new Error("Failed to submit prescription")
 
-      // Reset form
       setDescription("")
       setMedications([])
     } catch (error) {
@@ -80,22 +91,24 @@ export default function ConsultationForm({ appointmentId, medicines }) {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-6 mt-6">
+    <div className="grid lg:grid-cols-3 gap-6 mt-6">
       <DragDropContext onDragEnd={handleDragEnd}>
-        {/* Prescription Section (2/3) */}
-        <div className="col-span-2">
+        <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Prescription Details</CardTitle>
+              <CardTitle className="text-2xl font-bold">Prescription Details</CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="description">Description</Label>
-                <Input
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="description" className="text-lg">
+                  Consultation Notes
+                </Label>
+                <Textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Enter consultation notes"
+                  placeholder="Enter detailed consultation notes here..."
+                  className="min-h-[120px]"
                 />
               </div>
 
@@ -105,65 +118,64 @@ export default function ConsultationForm({ appointmentId, medicines }) {
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                     className={cn(
-                      "grid gap-4 min-h-[200px] p-4 border-2 border-dashed rounded-lg transition-all",
-                      snapshot.isDraggingOver && "border-primary shadow-lg",
+                      "space-y-4 min-h-[200px] p-4 border-2 border-dashed rounded-lg transition-all",
+                      snapshot.isDraggingOver && "border-primary bg-primary/5",
                     )}
                   >
                     {medications.map((medication, index) => (
                       <Draggable key={index} draggableId={`medication-${index}`} index={index}>
                         {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            className="flex items-start gap-4 p-4 bg-muted rounded-lg"
-                          >
-                            <div {...provided.dragHandleProps}>
-                              <GripVertical className="h-5 w-5 text-muted-foreground" />
-                            </div>
-
-                            <div className="grid gap-4 flex-1">
-                              <div className="font-medium">
-                                {medication.medicine.name} ({medication.medicine.type})
+                          <Card ref={provided.innerRef} {...provided.draggableProps} className="bg-card">
+                            <CardContent className="p-4 flex items-start gap-4">
+                              <div {...provided.dragHandleProps}>
+                                <GripVertical className="h-5 w-5 text-muted-foreground" />
                               </div>
-                              <div className="grid gap-4 sm:grid-cols-3">
-                                <Input
-                                  placeholder="Dosage (e.g., 2 tablets)"
-                                  value={medication.dosage}
-                                  onChange={(e) => {
-                                    const newMedications = [...medications]
-                                    newMedications[index].dosage = e.target.value
-                                    setMedications(newMedications)
-                                  }}
-                                />
 
-                                <Input
-                                  type="number"
-                                  placeholder="Quantity"
-                                  value={medication.quantity}
-                                  onChange={(e) => {
-                                    const newMedications = [...medications]
-                                    newMedications[index].quantity = Number(e.target.value)
-                                    setMedications(newMedications)
-                                  }}
-                                />
+                              <div className="grid gap-4 flex-1">
+                                <div className="flex justify-between items-center">
+                                  <div className="font-medium text-lg">{medication.medicine.name}</div>
+                                  <Badge variant="secondary">{medication.medicine.type}</Badge>
+                                </div>
+                                <div className="grid gap-4 sm:grid-cols-3">
+                                  <Input
+                                    placeholder="Dosage (e.g., 2 tablets)"
+                                    value={medication.dosage}
+                                    onChange={(e) => {
+                                      const newMedications = [...medications]
+                                      newMedications[index].dosage = e.target.value
+                                      setMedications(newMedications)
+                                    }}
+                                  />
 
-                                <Input
-                                  type="number"
-                                  placeholder="Days"
-                                  value={medication.days}
-                                  onChange={(e) => {
-                                    const newMedications = [...medications]
-                                    newMedications[index].days = Number(e.target.value)
-                                    setMedications(newMedications)
-                                  }}
-                                />
+                                  <Input
+                                    type="number"
+                                    placeholder="Quantity"
+                                    value={medication.quantity}
+                                    onChange={(e) => {
+                                      const newMedications = [...medications]
+                                      newMedications[index].quantity = Number(e.target.value)
+                                      setMedications(newMedications)
+                                    }}
+                                  />
+
+                                  <Input
+                                    type="number"
+                                    placeholder="Days"
+                                    value={medication.days}
+                                    onChange={(e) => {
+                                      const newMedications = [...medications]
+                                      newMedications[index].days = Number(e.target.value)
+                                      setMedications(newMedications)
+                                    }}
+                                  />
+                                </div>
                               </div>
-                            </div>
 
-                            <Button variant="ghost" size="icon" onClick={() => handleRemoveMedication(index)}>
-                              <X className="h-4 w-4" />
-                            </Button>
-                          </div>
+                              <Button variant="ghost" size="icon" onClick={() => handleRemoveMedication(index)}>
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </CardContent>
+                          </Card>
                         )}
                       </Draggable>
                     ))}
@@ -179,7 +191,7 @@ export default function ConsultationForm({ appointmentId, medicines }) {
 
               <Button
                 type="button"
-                className="w-full"
+                className="w-full text-lg py-6"
                 onClick={handleSubmit}
                 disabled={!description || medications.length === 0}
               >
@@ -189,11 +201,10 @@ export default function ConsultationForm({ appointmentId, medicines }) {
           </Card>
         </div>
 
-        {/* Medicine List Section (1/3) */}
-        <div className="col-span-1">
-          <Card>
+        <div className="lg:col-span-1">
+          <Card className="sticky top-6">
             <CardHeader>
-              <CardTitle className="text-lg">Available Medicines</CardTitle>
+              <CardTitle className="text-2xl font-bold">Available Medicines</CardTitle>
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -204,10 +215,10 @@ export default function ConsultationForm({ appointmentId, medicines }) {
                 />
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="max-h-[calc(100vh-200px)] overflow-y-auto">
               <Droppable droppableId="medicineList">
                 {(provided) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef} className="grid gap-2">
+                  <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
                     {filteredMedicines.map((medicine, index) => (
                       <Draggable key={medicine.id} draggableId={`medicine-${medicine.id}`} index={index}>
                         {(provided, snapshot) => (
@@ -216,15 +227,16 @@ export default function ConsultationForm({ appointmentId, medicines }) {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className={cn(
-                              "p-3 bg-muted rounded-lg cursor-move hover:bg-accent transition-colors flex items-center gap-2",
+                              "p-3 bg-card border rounded-lg cursor-move hover:bg-accent transition-colors flex items-center gap-2",
                               snapshot.isDragging && "shadow-lg",
                             )}
                           >
                             <GripVertical className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                            <div>
+                            <div className="flex-1">
                               <div className="font-medium">{medicine.name}</div>
                               <div className="text-sm text-muted-foreground">{medicine.type}</div>
                             </div>
+                            <Plus className="h-4 w-4 text-muted-foreground" />
                           </div>
                         )}
                       </Draggable>
@@ -240,3 +252,4 @@ export default function ConsultationForm({ appointmentId, medicines }) {
     </div>
   )
 }
+

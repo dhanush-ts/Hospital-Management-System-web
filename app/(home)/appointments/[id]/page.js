@@ -8,14 +8,14 @@ export default async function AppointmentPage({ params }) {
   const [appointmentData, medicines] = await Promise.all([
     fetchData(`features/appointment/${id}/`, "GET"),
     fetchData("features/medicines/", "GET"),
-  ])
+  ]);
 
   const appointmentDate = new Date(appointmentData.start_time).toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
-  })
+  });
 
   return (
     <div className="p-6">
@@ -27,9 +27,12 @@ export default async function AppointmentPage({ params }) {
               <div className="text-sm text-muted-foreground">Patient Name</div>
               <div className="font-medium">{appointmentData.patient_name}</div>
             </div>
-            <div className="flex gap-4">
-              <div className="font-medium">Token no : {appointmentData.token_no}</div>
-              <Badge variant={appointmentData.status === "completed" ? "default" : "secondary"} className="capitalize">
+            <div className="flex gap-4 items-center">
+              <div className="font-medium">Token No: {appointmentData.token_no}</div>
+              <Badge
+                variant={appointmentData.status === "completed" ? "default" : "secondary"}
+                className="capitalize"
+              >
                 {appointmentData.status}
               </Badge>
             </div>
@@ -43,8 +46,22 @@ export default async function AppointmentPage({ params }) {
         </CardContent>
       </Card>
 
-      <ConsultationForm appointmentId={params.id} medicines={medicines} />
-    </div>
-  )
-}
+      {/* Prescription Status */}
+      <div className="mt-4">
+        <Card className="p-4 flex items-center justify-between">
+          <p className="text-lg font-medium">Prescription Status:</p>
+          <Badge
+            variant={appointmentData.prescribed? "success" : "destructive"}
+            className="px-3 py-1 text-sm"
+          >
+            {appointmentData.prescription_status}
+          </Badge>
+        </Card>
+      </div>
 
+      {!appointmentData.prescribed && (
+        <ConsultationForm appointmentId={params.id} medicines={medicines} />
+      )}
+    </div>
+  );
+}
