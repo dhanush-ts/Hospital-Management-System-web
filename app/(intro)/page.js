@@ -38,7 +38,7 @@ export default function HomePage() {
               <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-purple-500 rounded-lg blur opacity-75 animate-pulse"></div>
               <div className="relative bg-white p-4 rounded-lg shadow-xl">
                 <Image 
-                  src="https://media.gettyimages.com/id/1312706413/photo/modern-hospital-building.jpg?s=612x612&w=0&k=20&c=oUILskmtaPiA711DP53DFhOUvE7pfdNeEK9CfyxlGio=" 
+                  src="/hospital.jpg" 
                   alt="Hospital Management Dashboard" 
                   width={600} 
                   height={400}

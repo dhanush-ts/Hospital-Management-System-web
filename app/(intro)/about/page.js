@@ -27,7 +27,7 @@ export default function AboutPage() {
               <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg blur opacity-75"></div>
               <div className="relative bg-white p-4 rounded-lg shadow-xl">
                 <Image 
-                  src="https://media.gettyimages.com/id/1301595548/photo/female-doctor-stock-photo.jpg?s=612x612&w=0&k=20&c=s9kTlQCWJcYmCyMwYwJfTq7jiC1NfHaXzZyGhi4fRHM=" 
+                  src="/narasu.jpg" 
                   alt="Hospital Staff" 
                   width={600} 
                   height={400}
@@ -222,8 +222,8 @@ const approaches = [
 const technologies = [
   { name: "Next.js", icon: <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg> },
   { name: "React", icon: <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle></svg> },
-  { name: "Node.js", icon: <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M2 6h20M2 12h20M2 18h20"></path></svg> },
-  { name: "MongoDB", icon: <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"></path><path d="M18.4 7.8l-8.5 8.4L5.6 12"></path></svg> },
+  { name: "Django", icon: <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M2 6h20M2 12h20M2 18h20"></path></svg> },
+  { name: "SQL lite", icon: <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"></path><path d="M18.4 7.8l-8.5 8.4L5.6 12"></path></svg> },
   { name: "Azure", icon: <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg> },
   { name: "TailwindCSS", icon: <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg> },
 ];
