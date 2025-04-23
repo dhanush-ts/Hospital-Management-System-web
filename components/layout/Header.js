@@ -17,7 +17,7 @@ const Header = () => {
             ?.split("=")[1];
 
         if (token) {
-            router.push("/home"); // Redirect if token exists
+            router.push("/home"); 
         }
     }, []);
 
