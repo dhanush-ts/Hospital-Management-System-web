@@ -116,45 +116,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="bg-gradient-to-r from-gray-50 to-gray-100 py-16 sm:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Meet Our Team
-            </h2>
-            <p className="mt-4 text-xl text-gray-500">
-              A dedicated group of healthcare and technology experts
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
-            {team.map((member, index) => (
-              <div 
-                key={member.name} 
-                className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 animate-fade-in"
-                style={{ animationDelay: `${index * 150}ms` }}
-              >
-                <div className="aspect-w-1 aspect-h-1 bg-gray-200">
-                  <Image 
-                    src={member.image || "/placeholder.svg"} 
-                    alt={member.name} 
-                    width={300} 
-                    height={300}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-medium text-gray-900">{member.name}</h3>
-                  <p className="text-sm text-blue-600">{member.role}</p>
-                  <p className="mt-3 text-base text-gray-500">{member.bio}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="bg-blue-600 py-16 sm:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
